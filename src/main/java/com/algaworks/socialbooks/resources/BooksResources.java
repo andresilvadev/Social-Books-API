@@ -15,7 +15,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.algaworks.socialbooks.domain.Book;
 import com.algaworks.socialbooks.services.BooksService;
-import com.algaworks.socialbooks.services.exceptions.BookNotFoundException;
 
 @RestController
 @RequestMapping("/books")
@@ -39,34 +38,20 @@ public class BooksResources {
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> search(@PathVariable("id") Long id){		
-		Book book = null;		
-		try {
-			book = booksService.search(id);	
-		} catch (BookNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}		
+		Book book = booksService.search(id);
 		return ResponseEntity.status(HttpStatus.OK).body(book);
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable("id") Long id){
-		try{
-			booksService.remove(id);
-						
-		}catch (BookNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
+		booksService.remove(id);
 		return ResponseEntity.noContent().build();		
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@RequestBody Book book, @PathVariable("id") Long id){
 		book.setId(id);
-		try {
-			booksService.update(book);
-		} catch (BookNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
+		booksService.update(book);
 		return ResponseEntity.noContent().build();
 	}
 }
