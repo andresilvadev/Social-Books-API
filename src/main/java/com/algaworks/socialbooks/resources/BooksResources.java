@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.algaworks.socialbooks.domain.Book;
+import com.algaworks.socialbooks.domain.Comment;
 import com.algaworks.socialbooks.services.BooksService;
 
 @RestController
@@ -53,5 +54,14 @@ public class BooksResources {
 		book.setId(id);
 		booksService.update(book);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(value = "/{id}/comments", method = RequestMethod.POST)
+	public ResponseEntity<Void> addComment(@PathVariable("id") Long bookId, @RequestBody Comment comment){
+		booksService.saveComment(bookId, comment);
+		
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+		
+		return ResponseEntity.created(uri).build();
 	}
 }
