@@ -66,4 +66,9 @@ public class BooksService {
 		return commentsRepository.save(comment);
 	}
 	
+	public List<Comment> listComments(Long bookId){
+		Book book = search(bookId);
+		return book.getComments();
+	}
+	
 }
